@@ -31,7 +31,7 @@ int HPEnemigoActual = 0;
 int ataqueEnemigoActual = 0;
 int HPPersonaje = 100;
 int MPPersonaje = 10;
-int nivelPersonaje = 5;
+int nivelPersonaje = 0;
 int experienciaPersonaje = 0;
 int oroPersonaje = 0;
 int monstruosVencidos = 0;
@@ -45,6 +45,7 @@ void main(int argc, char** argv) {
 
 void menuInicio() {
     int seleccion;
+    verificarPuntos();
     printf("============ Menu Principal =============\n"
             "Seleccione una opcion del siguiente menu: \n"
             "1. A la carga!!!! \n"
@@ -80,6 +81,12 @@ void menuInicio() {
             menuInicio();
             break;
     }
+}
+
+void verificarPuntos(){
+        nivelPersonaje = obtenerNivel(experienciaPersonaje);
+        HPMaxima = hpMaxima(nivelPersonaje);
+        MPMaxima = mpMaxima(nivelPersonaje);
 }
 //Menu que inicia las acciones del menu batalla, seleccionando aleatoriamente quien inicia la batalla y el monstruo a enfrentar
 
@@ -121,6 +128,7 @@ void descansar() {
         if (oroPersonaje >= oroDormir) {
             HPPersonaje = HPMaxima;
             MPPersonaje = MPMaxima;
+            oroPersonaje -= oroDormir;
             printf("Personaje con puntos maximos | HP: %d / MP: %d\n\n", HPPersonaje, MPPersonaje);
         } else {
             printf("No cuentas con el oro suficiente para descansar y recuperar tus puntos HP y MP\n");
@@ -202,6 +210,7 @@ void reiniciarValores() {
 }
 
 void enemigo(int aleatorio) {
+    aleatorio = 1;
     if (aleatorio == 1) {
         enemigoActual = 1;
         HPEnemigoActual = HPDarkWolf;
