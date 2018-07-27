@@ -21,6 +21,7 @@ const int MPPotion = 10;
 const int p1 = 50;
 const int p2 = 100;
 const int p3 = 75;
+const int oroDormir = 30;
 char argumento = 1;
 char *puntero[];
 int HPMaxima = 100;
@@ -63,7 +64,7 @@ void menuInicio() {
             tienda();
             break;
         case 3:
-            printf("3");
+            descansar();
             break;
         case 4:
             status();
@@ -108,6 +109,24 @@ void batalla() {
             turnoEnemigo();
         }
     }
+    menuInicio();
+}
+//https://github.com/fabricioRG/Practica-1-Lenguajes-Formales-.git
+
+void descansar() {
+    char respuesta[1];
+    printf("\n============== zzZzzZzzZ =================\n¿Deseas recuperar los puntos HP y MP al \nmaximo por %d de oro? [s/n]\n", oroDormir);
+    scanf(" %s", respuesta);
+    if (strcmp(respuesta, "s") == 0) {
+        if (oroPersonaje >= oroDormir) {
+            HPPersonaje = HPMaxima;
+            MPPersonaje = MPMaxima;
+            printf("Personaje con puntos maximos | HP: %d / MP: %d\n\n", HPPersonaje, MPPersonaje);
+        } else {
+            printf("No cuentas con el oro suficiente para descansar y recuperar tus puntos HP y MP\n");
+        }
+    }
+    printf("Regresando al menu principal...\n\n");
     menuInicio();
 }
 
