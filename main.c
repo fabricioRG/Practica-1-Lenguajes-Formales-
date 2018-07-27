@@ -154,6 +154,7 @@ void turnoPersonaje() {
             monstruosVencidos++;
             experienciaPersonaje += recompensa(aleatorioEntre2y5(), enemigoActual);
             oroPersonaje += recompensa(aleatorioEntre5y15(), enemigoActual);
+            
             printf("Enhorabuena, has vencido a %s , monstruos vencidos: %d\n", *puntero, monstruosVencidos);
         } else {
             printf("Vida de %s:  %d\n", *puntero, HPEnemigoActual);

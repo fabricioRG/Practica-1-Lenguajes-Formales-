@@ -47,3 +47,9 @@ int recompensa(int aleatorio, int enemigo){
     }
     return recompensa;
 }
+
+int obtenerNivel(int experiencia){
+    if(experiencia > 100){
+        return experiencia/100;
+    }
+}

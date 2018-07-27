@@ -7,3 +7,4 @@ void tengoMiedo();
 void numeroAleatorio();
 int ataqueEnemigo();
 int recompensa();
+int obtenerNivel();
