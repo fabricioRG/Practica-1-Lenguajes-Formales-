@@ -84,9 +84,9 @@ void menuInicio() {
 }
 
 void verificarPuntos(){
-        nivelPersonaje = obtenerNivel(experienciaPersonaje);
-        HPMaxima = hpMaxima(nivelPersonaje);
-        MPMaxima = mpMaxima(nivelPersonaje);
+    nivelPersonaje = obtenerNivel(experienciaPersonaje);
+    HPMaxima = hpMaxima(nivelPersonaje);
+    MPMaxima = mpMaxima(nivelPersonaje);
 }
 //Menu que inicia las acciones del menu batalla, seleccionando aleatoriamente quien inicia la batalla y el monstruo a enfrentar
 
@@ -108,11 +108,11 @@ void inicio() {
 void batalla() {
     argumento = 1;
     while (argumento == 1) {
-        if (HPEnemigoActual > 0) {
+        if (HPEnemigoActual > 0 && argumento == 1) {
             turnoPersonaje();
             printf("Personaje | HP: %d / MP: %d\n\n", HPPersonaje, MPPersonaje);
         }
-        if (HPPersonaje > 0 && HPEnemigoActual > 0) {
+        if (HPPersonaje > 0 & HPEnemigoActual > 0 & argumento == 1) {
             turnoEnemigo();
         }
     }
@@ -160,10 +160,12 @@ void turnoPersonaje() {
             argumento = 0;
             HPEnemigoActual = 0;
             monstruosVencidos++;
-            experienciaPersonaje += recompensa(aleatorioEntre2y5(), enemigoActual);
-            oroPersonaje += recompensa(aleatorioEntre5y15(), enemigoActual);
-            
-            printf("Enhorabuena, has vencido a %s , monstruos vencidos: %d\n", *puntero, monstruosVencidos);
+            int recompensaExpe = recompensa(aleatorioEntre2y5(), enemigoActual);
+            int recompensaOro = recompensa(aleatorioEntre5y15(), enemigoActual);
+            experienciaPersonaje += recompensaExpe;
+            oroPersonaje += recompensaOro;
+            printf("¡¡¡Enhorabuena!!!, has vencido a %s , monstruos vencidos: %d\n", *puntero, monstruosVencidos);
+            printf("Has ganado %d puntos de experiencia, y %d de oro para tu personaje\n", recompensaExpe, recompensaOro);
         } else {
             printf("Vida de %s:  %d\n", *puntero, HPEnemigoActual);
         }
@@ -207,6 +209,17 @@ void reiniciarValores() {
     MPotion = 0;
     monstruosVencidos = 0;
     argumento = 0;
+}
+
+void tengoMiedo(){
+    int oroMin = oroParaHuir(nivelPersonaje, aleatorioEntre5y10());
+    if(oroPersonaje >= oroMin){
+        oroPersonaje -= oroMin;
+        argumento = 0;
+        printf("Oro necesario: %d\nTu personaje ha huido de la batalla\nRegresando al menu principal...\n\n", oroMin);
+    } else {
+        printf("Oro necesario: %d\nNo cuentas con el oro necesario para huir de la batalla\n", oroMin);
+    }
 }
 
 void enemigo(int aleatorio) {

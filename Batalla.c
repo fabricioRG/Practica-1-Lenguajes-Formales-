@@ -13,10 +13,6 @@ int curar(int nivel, int aleatorio, int MP) {
     return curacion;
 }
 
-void tengoMiedo() {
-    printf("Teniendo miedo");
-}
-
 int ataqueEnemigo(int enemigo, int nivel, int aleatorio) {
     int ataqueFinal = 0;
     int ataqueEnemigo = 0;
@@ -60,4 +56,9 @@ int hpMaxima(int nivel) {
 
 int mpMaxima(int nivel) {
     return 10 * (nivel + 1);
+}
+
+int oroParaHuir(int nivel, int aleatorio){
+    int oroNecesario = (nivel*2) + aleatorio;
+    return oroNecesario;
 }

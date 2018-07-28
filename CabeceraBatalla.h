@@ -3,10 +3,10 @@
 
 int atacar();
 int curar();
-void tengoMiedo();
 void numeroAleatorio();
 int ataqueEnemigo();
 int recompensa();
 int obtenerNivel();
 int hpMaxima();
 int mpMaxima();
+int oroParaHuir();
