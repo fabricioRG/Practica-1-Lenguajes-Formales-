@@ -9,26 +9,26 @@
 #include "CabeceraAleatorios.h"
 #include "CabeceraTienda.h"
 
-const char textoDarkWolf[] = "Dark Wolf";
-const char textoDragon[] = "Dragon";
-const char textoMightyGolem[] = "Mighty Golem";
-const int HPDarkWolf = 100;
-const int HPDragon = 200;
-const int HPMightyGolem = 350;
-const int HPPotion = 25;
-const int HPHiPotion = 75;
-const int MPPotion = 10;
-const int p1 = 50;
-const int p2 = 100;
-const int p3 = 75;
-const int oroDormir = 30;
+const char TEXTO_DARK_WOLF[] = "Dark Wolf";
+const char TEXTO_DRAGON[] = "Dragon";
+const char TEXTO_MIGHTY_GOLEM[] = "Mighty Golem";
+const int HP_DARK_WOLF = 100;
+const int HP_DRAGON = 200;
+const int HP_MIGHTY_GOLEM = 350;
+const int HP_POTION = 25;
+const int HP_HI_POTION = 75;
+const int MP_POTION = 10;
+const int P1 = 50;
+const int P2 = 100;
+const int P3 = 75;
+const int ORO_DORMIR = 30;
 char argumento = 1;
 char *puntero[];
 int HPMaxima = 100;
 int MPMaxima = 10;
 int enemigoActual = 0;
 int HPEnemigoActual = 0;
-int ataqueEnemigoActual = 0;printf("Vida de %s:  %d\n", *puntero, HPEnemigoActual);
+int ataqueEnemigoActual = 0;
 int HPPersonaje = 100;
 int MPPersonaje = 10;
 int nivelPersonaje = 0;
@@ -38,8 +38,18 @@ int monstruosVencidos = 0;
 int Potion = 0;
 int HiPotion = 0;
 int MPotion = 0;
+char *jugador[];
+char personaje[];
 
-void main(int argc, char** argv) {
+void main(int argc, char *argv[]) {
+    if (argc > 1) {
+        *jugador = argv[1];
+        printf("%s", *jugador);
+    } else {
+        printf("Ingrese el nombre de su jugador: \n");
+        scanf(" %s", &personaje);
+        *jugador = personaje;
+    }
     menuInicio();
 }
 
@@ -74,7 +84,7 @@ void menuInicio() {
             printf("5");
             break;
         case 6:
-            printf("Saliendo del juego...");
+            printf("Saliendo del juego...\n");
             break;
         default:
             printf("\n¡Opcion no valida!\n\n");
@@ -93,11 +103,11 @@ void verificarPuntos(){
 void inicio() {
     printf("=============== Batalla ================\n");
     enemigo(aleatorioEntre1y3());
-    printf("         Personaje vs %s\n\n", *puntero);
-    printf("Personaje | HP: %d / MP: %d\n", HPPersonaje, MPPersonaje);
+    printf("         %s vs %s\n\n", *jugador, *puntero);
+    printf("%s | HP: %d / MP: %d\n", *jugador, HPPersonaje, MPPersonaje);
     printf("Vida de %s:  %d\n\n", *puntero, HPEnemigoActual);
     if (aleatorioEntre1y2() == 1) {
-        batalla();printf("Vida de %s:  %d\n", *puntero, HPEnemigoActual);
+        batalla();
     } else {
         turnoEnemigo();
         batalla();
@@ -112,7 +122,7 @@ void batalla() {
     while (argumento == 1) {
         if (HPEnemigoActual > 0 && argumento == 1) {
             turnoPersonaje();
-            printf("Personaje | HP: %d / MP: %d\n\n", HPPersonaje, MPPersonaje);
+            printf("%s | HP: %d / MP: %d\n\n", *jugador, HPPersonaje, MPPersonaje);
         }
         if (HPPersonaje > 0 & HPEnemigoActual > 0 & argumento == 1) {
             turnoEnemigo();
@@ -124,13 +134,13 @@ void batalla() {
 
 void descansar() {
     char respuesta[1];
-    printf("\n============== zzZzzZzzZ =================\n¿Deseas recuperar los puntos HP y MP al \nmaximo por %d de oro? [s/n]\n", oroDormir);
+    printf("\n============== zzZzzZzzZ =================\n¿Deseas recuperar los puntos HP y MP al \nmaximo por %d de oro? [s/n]\n", ORO_DORMIR);
     scanf(" %s", respuesta);
     if (strcmp(respuesta, "s") == 0) {
-        if (oroPersonaje >= oroDormir) {
+        if (oroPersonaje >= ORO_DORMIR) {
             HPPersonaje = HPMaxima;
             MPPersonaje = MPMaxima;
-            oroPersonaje -= oroDormir;
+            oroPersonaje -= ORO_DORMIR;
             printf("Personaje con puntos maximos | HP: %d / MP: %d\n\n", HPPersonaje, MPPersonaje);
         } else {
             printf("No cuentas con el oro suficiente para descansar y recuperar tus puntos HP y MP\n");
@@ -147,7 +157,7 @@ void descansar() {
 void turnoPersonaje() {
     int opcion = 0;
     int ataque = 0;
-    printf("--------->>Turno de Personaje<<---------\n");
+    printf("--------->>Turno de %s<<---------\n", *jugador);
     printf("\nSelecciona una opcion: \n"
             "1. Atacar\n"
             "2. Curar\n"
@@ -167,7 +177,7 @@ void turnoPersonaje() {
             experienciaPersonaje += recompensaExpe;
             oroPersonaje += recompensaOro;
             printf("¡¡¡Enhorabuena!!!, has vencido a %s , monstruos vencidos: %d\n", *puntero, monstruosVencidos);
-            printf("Has ganado %d puntos de experiencia, y %d de oro para tu personaje\n", recompensaExpe, recompensaOro);
+            printf("Has ganado %d puntos de experiencia, y %d de oro para %s\n", recompensaExpe, recompensaOro, *jugador);
         } else {
             printf("Vida de %s:  %d\n", *puntero, HPEnemigoActual);
         }
@@ -193,10 +203,10 @@ void turnoEnemigo() {
     printf("Ataque de %s con %d puntos de daño\n", *puntero, ataqueEnemigoActual);
     if (HPPersonaje <= 0) {
         reiniciarValores();
-        printf("\nHP de personaje ha llegado a 0\n");
+        printf("\nHP de %s ha llegado a 0\n", *jugador);
         printf("=======>>Has perdido la batalla<<========\n\n");
     } else {
-        printf("Personaje | HP: %d / MP: %d\n\n", HPPersonaje, MPPersonaje);
+        printf("%s | HP: %d / MP: %d\n\n", *jugador, HPPersonaje, MPPersonaje);
     }
 }
 
@@ -218,7 +228,7 @@ void tengoMiedo(){
     if(oroPersonaje >= oroMin){
         oroPersonaje -= oroMin;
         argumento = 0;
-        printf("Oro necesario: %d\nTu personaje ha huido de la batalla\nRegresando al menu principal...\n\n", oroMin);
+        printf("Oro necesario: %d\n%s ha huido de la batalla\nRegresando al menu principal...\n\n", oroMin, *jugador);
     } else {
         printf("Oro necesario: %d\nNo cuentas con el oro necesario para huir de la batalla\n", oroMin);
     }
@@ -227,23 +237,23 @@ void tengoMiedo(){
 void enemigo(int aleatorio) {
     if (aleatorio == 1) {
         enemigoActual = 1;
-        HPEnemigoActual = HPDarkWolf;
-        *puntero = textoDarkWolf;
+        HPEnemigoActual = HP_DARK_WOLF;
+        *puntero = TEXTO_DARK_WOLF;
     } else if (aleatorio == 2) {
         enemigoActual = 2;
-        HPEnemigoActual = HPDragon;
-        *puntero = textoDragon;
+        HPEnemigoActual = HP_DRAGON;
+        *puntero = TEXTO_DRAGON;
     } else if (aleatorio == 3) {
         enemigoActual = 3;
-        HPEnemigoActual = HPMightyGolem;
-        *puntero = textoMightyGolem;
+        HPEnemigoActual = HP_MIGHTY_GOLEM;
+        *puntero = TEXTO_MIGHTY_GOLEM;
     }
 }
 
 void tienda() {
     int opcion;
     printf("\n=============== Tienda ===================\nSelecciona el articulo que deseas comprar: \n\n");
-    printf("Personaje | Oro : %d / HP: %d / MP: %d \n\n", oroPersonaje, HPPersonaje, MPPersonaje);
+    printf("%s | Oro : %d / HP: %d / MP: %d \n\n", *jugador, oroPersonaje, HPPersonaje, MPPersonaje);
     printf("1. Potion: 50 oro, cura 25 HP\n"
             "2. Hi-Potion: 100 oro, cura 75 HP\n"
             "3. M-Potion: 75 oro, recupera 10 MP\n"
@@ -252,7 +262,7 @@ void tienda() {
     if (opcion == 1) {
         if (obtenerPotion(oroPersonaje) != 0) {
             Potion += 1;
-            oroPersonaje -= p1;
+            oroPersonaje -= P1;
             printf("-->Has comprado el articulo 'Potion'<--");
         } else {
             printf("No tienes suficiente oro para comprar el articulo 'Potion'");
@@ -261,7 +271,7 @@ void tienda() {
     } else if (opcion == 2) {
         if (obtenerHiPotion(oroPersonaje) != 0) {
             HiPotion += 1;
-            oroPersonaje -= p2;
+            oroPersonaje -= P2;
             printf("-->Has comprado el articulo 'Hi-Potion'<--");
         } else {
             printf("No tienes suficiente oro para comprar el articulo 'Hi-Potion'");
@@ -270,7 +280,7 @@ void tienda() {
     } else if (opcion == 3) {
         if (obtenerMPotion(oroPersonaje) != 0) {
             MPotion += 1;
-            oroPersonaje -= p3;
+            oroPersonaje -= P3;
             printf("-->Has comprado el articulo 'M-Potion'<--");
         } else {
             printf("No tienes suficiente oro para comprar el articulo 'M-Potion'");
@@ -284,7 +294,7 @@ void tienda() {
 void status() {
     char respuesta[1];
     printf("\n=============== Status ===================\n");
-    printf("Nombre de jugador: Personaje\n");
+    printf("Nombre de jugador: %s\n", *jugador);
     printf("HP: %d\nMP: %d\nNivel: %d\nExperiencia: %d\nOro: %d\nMonstruos vencidos: %d\nPotion: %d\nHi-Potion: %d\nM-Potion: %d"
             "\n\nRegresar al menu principal [s/n]\n", HPPersonaje, MPPersonaje,
             nivelPersonaje, experienciaPersonaje, oroPersonaje, monstruosVencidos, Potion, HiPotion, MPotion);
@@ -306,20 +316,20 @@ void item() {
     if (opcion == 1) {
         if (Potion > 0) {
             Potion--;
-            aumentarHP(HPPotion);
+            aumentarHP(HP_POTION);
         } else {
             printf("No hay 'Potion' disponible\n");
         }
     } else if (opcion == 2) {
         if (HiPotion > 0) {
             HiPotion--;
-            aumentarHP(HPHiPotion);
+            aumentarHP(HP_HI_POTION);
         } else {
             printf("No hay 'Hi-Potion' disponible\n");
         }
     } else if (opcion == 3) {
         if (MPotion > 0) {
-            int manaTemporal = MPPersonaje + MPPotion;
+            int manaTemporal = MPPersonaje + MP_POTION;
             if (manaTemporal > MPMaxima) {
                 int manaReal = MPMaxima - MPPersonaje;
                 MPPersonaje = MPMaxima;
@@ -327,8 +337,8 @@ void item() {
                 printf("Mana de personaje se ha aumentado %d puntos MP", manaReal);
             } else {
                 MPotion--;
-                MPPersonaje += MPPotion;
-                printf("Mana de personaje se ha aumentado %d puntos MP\n", MPPotion);
+                MPPersonaje += MP_POTION;
+                printf("Mana de personaje se ha aumentado %d puntos MP\n", MP_POTION);
             }
         } else {
             printf("No hay 'M-Potion' disponible\n");
@@ -339,13 +349,13 @@ void item() {
 void aumentarHP(int curacion) {
     int vidaTemporal = HPPersonaje + curacion;
     if (HPPersonaje == HPMaxima) {
-        printf(">>La salud ha llegado al maximo<<\n");
+        printf(">>La salud de %s ha llegado al maximo<<\n", *jugador);
     } else if (vidaTemporal > HPMaxima) {
         int curacionReal = HPMaxima - HPPersonaje;
         HPPersonaje = HPMaxima;
-        printf("Curacion de personaje con %d puntos HP\n", curacionReal);
+        printf("Curacion de %s con %d puntos HP\n",  *jugador, curacionReal);
     } else {
         HPPersonaje += curacion;
-        printf("Curacion de personaje con %d puntos HP\n", curacion);
+        printf("Curacion de %s con %d puntos HP\n", *jugador, curacion);
     }
 }
