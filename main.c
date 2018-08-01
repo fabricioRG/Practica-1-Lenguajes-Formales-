@@ -28,7 +28,7 @@ int HPMaxima = 100;
 int MPMaxima = 10;
 int enemigoActual = 0;
 int HPEnemigoActual = 0;
-int ataqueEnemigoActual = 0;
+int ataqueEnemigoActual = 0;printf("Vida de %s:  %d\n", *puntero, HPEnemigoActual);
 int HPPersonaje = 100;
 int MPPersonaje = 10;
 int nivelPersonaje = 0;
@@ -94,8 +94,10 @@ void inicio() {
     printf("=============== Batalla ================\n");
     enemigo(aleatorioEntre1y3());
     printf("         Personaje vs %s\n\n", *puntero);
+    printf("Personaje | HP: %d / MP: %d\n", HPPersonaje, MPPersonaje);
+    printf("Vida de %s:  %d\n\n", *puntero, HPEnemigoActual);
     if (aleatorioEntre1y2() == 1) {
-        batalla();
+        batalla();printf("Vida de %s:  %d\n", *puntero, HPEnemigoActual);
     } else {
         turnoEnemigo();
         batalla();
@@ -223,7 +225,6 @@ void tengoMiedo(){
 }
 
 void enemigo(int aleatorio) {
-    aleatorio = 1;
     if (aleatorio == 1) {
         enemigoActual = 1;
         HPEnemigoActual = HPDarkWolf;
