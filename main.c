@@ -22,6 +22,7 @@ const int P1 = 50;
 const int P2 = 100;
 const int P3 = 75;
 const int ORO_DORMIR = 30;
+char direccion[] = "./punteos.txt";
 char argumento = 1;
 char *puntero[];
 int HPMaxima = 100;
@@ -39,20 +40,76 @@ int Potion = 0;
 int HiPotion = 0;
 int MPotion = 0;
 char *jugador[];
-char personaje[];
+char personaje[20];
+FILE *fd;
+
+/**
+ * Funcion encargado de agregar texto en el archivo "punteos.txt"
+ */
+void agregar() {
+    fflush(stdin);
+    fd = fopen(direccion, "at");
+    if (fd == NULL) {
+        printf("No se ha podido escribir en el archivo\n");
+    }
+    char txt[10];
+    char *texto[10];
+    *texto = txt;
+    sprintf(txt, "%d", monstruosVencidos);
+    fprintf(fd, "\nNombre Jugador: ");
+    fwrite(*jugador, 1, strlen(*jugador), fd);
+    fprintf(fd, "\nMonstruos vencidos: ");
+    fwrite(*texto, 1, strlen(*texto), fd);
+}
+/**
+ * Funcion que se encarga de mostrar en pantalla los datos de todos los jugadores; muestra el nombre del jugador y su
+ * punteo
+ */
+void visualizar(){
+    int c;
+    fd = fopen(direccion, "r");
+    if(fd == NULL){
+        printf("No se ha podido leer el archivo");
+    }
+    
+    printf("================ Punteos ================\n");
+    while((c = fgetc(fd)) != EOF) {
+        if(c == '\n'){
+            printf("\n");
+        } else {
+            putchar(c);
+        }
+    }
+    printf("\n\n¿Regresar al menu principal? [s/n]\n");
+    char respuesta[1];
+    scanf(" %s", respuesta);
+    if (strcmp(respuesta, "s") == 0) {
+        menuInicio();
+    } else {
+        visualizar();
+    }
+}
 
 void main(int argc, char *argv[]) {
     if (argc > 1) {
         *jugador = argv[1];
         printf("%s", *jugador);
     } else {
-        printf("Ingrese el nombre de su jugador: \n");
-        scanf(" %s", &personaje);
-        *jugador = personaje;
+        datosJugdor();
     }
     menuInicio();
 }
-
+/**
+ * Funcion encargada de pedir al usuario o jugador, los datos de su personaje para que estos sean debidamente guardados
+ */
+void datosJugdor() {
+    printf("Ingrese el nombre de su jugador: \n");
+    scanf(" %s", &personaje);
+    *jugador = personaje;
+}
+/**
+ * Funcion que muestra al jugador las opciones que puede realizar durante la ejecucion del juego
+ */
 void menuInicio() {
     int seleccion;
     verificarPuntos();
@@ -81,7 +138,7 @@ void menuInicio() {
             status();
             break;
         case 5:
-            printf("5");
+            visualizar();
             break;
         case 6:
             printf("Saliendo del juego...\n");
@@ -92,14 +149,16 @@ void menuInicio() {
             break;
     }
 }
-
-void verificarPuntos(){
+/**
+ * Funcion que modifica el valor de la "HP maxima" del jugador, asi como la "MP maxima" basada en su experiencia
+ */
+void verificarPuntos() {
     nivelPersonaje = obtenerNivel(experienciaPersonaje);
     HPMaxima = hpMaxima(nivelPersonaje);
     MPMaxima = mpMaxima(nivelPersonaje);
 }
-//Menu que inicia las acciones del menu batalla, seleccionando aleatoriamente quien inicia la batalla y el monstruo a enfrentar
 
+//Menu que inicia las acciones del menu batalla, seleccionando aleatoriamente quien inicia la batalla y el monstruo a enfrentar
 void inicio() {
     printf("=============== Batalla ================\n");
     enemigo(aleatorioEntre1y3());
@@ -196,20 +255,27 @@ void turnoPersonaje() {
     }
 }
 
+/**
+ * Funcion encargada de generar el daño que afectara al jugador en turno
+ */
 void turnoEnemigo() {
     printf("--------->>Turno de %s<<-----------\n", *puntero);
     ataqueEnemigoActual = ataqueEnemigo(enemigoActual, nivelPersonaje, aleatorioEntre1y2());
     HPPersonaje -= ataqueEnemigoActual;
     printf("Ataque de %s con %d puntos de daño\n", *puntero, ataqueEnemigoActual);
     if (HPPersonaje <= 0) {
+        agregar();
         reiniciarValores();
         printf("\nHP de %s ha llegado a 0\n", *jugador);
         printf("=======>>Has perdido la batalla<<========\n\n");
+        datosJugdor();
     } else {
         printf("%s | HP: %d / MP: %d\n\n", *jugador, HPPersonaje, MPPersonaje);
     }
 }
-
+/**
+ * Funcion utilizada para llevar todos los valores a su minimo, esto se produce tras perder una partida
+ */
 void reiniciarValores() {
     HPPersonaje = HPMaxima;
     MPPersonaje = 10;
@@ -223,9 +289,9 @@ void reiniciarValores() {
     argumento = 0;
 }
 
-void tengoMiedo(){
+void tengoMiedo() {
     int oroMin = oroParaHuir(nivelPersonaje, aleatorioEntre5y10());
-    if(oroPersonaje >= oroMin){
+    if (oroPersonaje >= oroMin) {
         oroPersonaje -= oroMin;
         argumento = 0;
         printf("Oro necesario: %d\n%s ha huido de la batalla\nRegresando al menu principal...\n\n", oroMin, *jugador);
@@ -233,7 +299,10 @@ void tengoMiedo(){
         printf("Oro necesario: %d\nNo cuentas con el oro necesario para huir de la batalla\n", oroMin);
     }
 }
-
+/**
+ * Funcion que recibe como parametro un numero aleatorio entre 1 y 3, y dependiendo de ese numero, se asignara un enemigo
+ * @param aleatorio
+ */
 void enemigo(int aleatorio) {
     if (aleatorio == 1) {
         enemigoActual = 1;
@@ -249,7 +318,9 @@ void enemigo(int aleatorio) {
         *puntero = TEXTO_MIGHTY_GOLEM;
     }
 }
-
+/**
+ * Funcion que permite comprar articulos en la tienda, para curar al personaje, asi como para recuperar sus puntos de mana
+ */
 void tienda() {
     int opcion;
     printf("\n=============== Tienda ===================\nSelecciona el articulo que deseas comprar: \n\n");
@@ -290,7 +361,10 @@ void tienda() {
         menuInicio();
     }
 }
-
+/**
+ * Funcion que muestra toda la informacion del jugador, su vida, puntos de mana, articulos comprados, monstruos vencidos, el
+ * nivel del personaje, oro disponible y su experiencia
+ */
 void status() {
     char respuesta[1];
     printf("\n=============== Status ===================\n");
@@ -305,7 +379,9 @@ void status() {
         status();
     }
 }
-
+/**
+ * Funcion utilizada en batalla, la cual permite utilizar los articulos disponible que fueron comprados en la tienda
+ */
 void item() {
     int opcion;
     printf("Items disponibles:\n"
@@ -353,7 +429,7 @@ void aumentarHP(int curacion) {
     } else if (vidaTemporal > HPMaxima) {
         int curacionReal = HPMaxima - HPPersonaje;
         HPPersonaje = HPMaxima;
-        printf("Curacion de %s con %d puntos HP\n",  *jugador, curacionReal);
+        printf("Curacion de %s con %d puntos HP\n", *jugador, curacionReal);
     } else {
         HPPersonaje += curacion;
         printf("Curacion de %s con %d puntos HP\n", *jugador, curacion);
