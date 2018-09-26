@@ -1,0 +1,27 @@
+
+Nombre Jugador: j1
+Monstruos vencidos: 0
+Nombre Jugador: j0
+Monstruos vencidos: 2
+Nombre Jugador: j4
+Monstruos vencidos: 0
+Nombre Jugador: j2
+Monstruos vencidos: 3
+Nombre Jugador: j2
+Monstruos vencidos: 0
+Nombre Jugador: j1
+Monstruos vencidos: 0
+Nombre Jugador: 1
+Monstruos vencidos: 5
+Nombre Jugador: 2
+Monstruos vencidos: 0
+Nombre Jugador: 1
+Monstruos vencidos: 1
+Nombre Jugador: 1
+Monstruos vencidos: 0
+Nombre Jugador: 1
+Monstruos vencidos: 0
+Nombre Jugador: 1
+Monstruos vencidos: 0
+Nombre Jugador: j6
+Monstruos vencidos: 0
